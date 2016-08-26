@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.leimingtech.service.module.withdraw.dao.mapper.WithdrawMapper">
+    <resultMap id="BaseResultMap" type="com.leimingtech.core.entity.base.Withdraw" >
+        <id column="id" property="id" jdbcType="INTEGER" />
+        <result column="account_name" property="accountName" jdbcType="VARCHAR" />
+        <result column="account_no" property="accountNo" jdbcType="VARCHAR" />
+        <result column="amount" property="amount" jdbcType="VARCHAR" />
+        <result column="account_prop" property="accountProp" jdbcType="VARCHAR" />
+        <result column="bank_code" property="bankCode" jdbcType="VARCHAR" />
+        <result column="status" property="status" jdbcType="INTEGER" />
+        <result column="create_time" property="createTime" jdbcType="BIGINT" />
+        <result column="createdby" property="createdby" jdbcType="VARCHAR" />
+        <result column="update_time" property="updatetime" jdbcType="BIGINT" />
+        <result column="updateby" property="updateby" jdbcType="VARCHAR" />
+    </resultMap>
+
+    <sql id="Base_Column_List" >
+        id, account_name, account_no, amount, account_prop, bank_code, status, 
+        create_time, createdby,  update_time, updateby
+    </sql>
+    
+    <sql id="whereStatement">
+		<where>
+			1 = 1
+			<if test="condition.accountNo != null">
+	          	and a.account_no like CONCAT(#{condition.accountNo, jdbcType=VARCHAR},'%') 
+	        </if>
+		</where>
+	</sql>
+	
+	<sql id="whereStatement2">
+		<where>
+			1 = 1
+			<if test="condition.accountNo != null">
+	          	and a.account_no like CONCAT(#{condition.accountNo, jdbcType=VARCHAR},'%') 
+	        </if>
+		</where>
+	</sql>
+    
+    <!--查询条数-->
+    <select id="getWithdrawTotal" parameterType="com.leimingtech.core.entity.base.Withdraw" resultType="int">
+        SELECT count(1) FROM shop_withdraw a 
+        <include refid="whereStatement2" />
+    </select>
+
+    <!--查询分页列表-->
+    <select id="getWithdrawList" parameterType="com.leimingtech.service.utils.page.Pager" resultMap="BaseResultMap">
+        SELECT
+        <include refid="Base_Column_List" />
+        FROM shop_withdraw a 
+        <include refid="whereStatement" />
+        order by a.id desc
+    </select>
+
+	<!--根据id获取数据-->
+    <select id="getWithdrawById" resultMap="BaseResultMap" parameterType="java.lang.Integer">
+        select
+        <include refid="Base_Column_List" />
+        from shop_withdraw where id = #{id}
+    </select>
+    
+    <!--保存数据-->
+    <insert id="saveWithdraw" parameterType="com.leimingtech.core.entity.base.Withdraw" useGeneratedKeys="true" keyProperty="id">
+        INSERT INTO shop_withdraw(account_name, account_no, amount, account_prop, bank_code, status, create_time, createdby)
+        VALUES(#{accountName},#{accountNo},#{amount},#{accountProp},#{bankCode},#{status},#{createTime},#{createdby});
+    </insert>
+    
+    <!--更新数据-->
+    <update id="updateWithdraw" parameterType="com.leimingtech.core.entity.base.Withdraw">
+        update shop_withdraw
+        set 
+        account_name = #{accountName,jdbcType=VARCHAR},
+        account_no = #{accountNo,jdbcType=VARCHAR},
+        amount = #{amount,jdbcType=VARCHAR},
+        account_prop = #{accountProp,jdbcType=VARCHAR},
+        bank_code = #{bankCode,jdbcType=VARCHAR},
+        update_time = #{updatetime,jdbcType=BIGINT},
+        updateby = #{updateby,jdbcType=VARCHAR}
+        where id=#{id,jdbcType=INTEGER}
+    </update>
+
+	<!--删除数据-->
+    <delete id="deleteWithdraw" parameterType="java.lang.Integer">
+        delete from shop_withdraw where id=#{id}
+    </delete>
+    
+    <!-- 查询全部实体 -->
+    <select id="getAllWithdrawList" resultMap="BaseResultMap">
+        SELECT
+        <include refid="Base_Column_List" />
+        FROM shop_withdraw a 
+        order by a.id desc
+    </select>
+    
+    <!--根据id获取数据-->
+    <select id="getWithdrawByName" resultMap="BaseResultMap" parameterType="java.lang.String">
+        select
+        <include refid="Base_Column_List" />
+        from shop_withdraw where account_no = #{entityName}
+    </select>
+
+</mapper>

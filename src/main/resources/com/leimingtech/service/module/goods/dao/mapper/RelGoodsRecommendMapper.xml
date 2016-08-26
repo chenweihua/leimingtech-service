@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.leimingtech.service.module.goods.dao.mapper.RelGoodsRecommendMapper">
+    <resultMap id="BaseResultMap" type="com.leimingtech.core.entity.base.RelGoodsRecommend" >
+        <id column="rel_id" property="relId" jdbcType="INTEGER" />
+        <result column="recommend_id" property="reCommendId" jdbcType="INTEGER" />
+        <result column="goods_id" property="goodsId" jdbcType="INTEGER" />
+         <result column="sort" property="sort" jdbcType="INTEGER" />
+        <association property="goods" column="goodsid"   resultMap="com.leimingtech.service.module.goods.dao.mapper.GoodsMapper.BaseResultMap"/>
+    </resultMap>
+    
+    <sql id="Base_Column_List" >
+        rel_id,recommend_id,goods_id,sort
+    </sql>
+    
+    
+    
+    <insert id="save" parameterType="com.leimingtech.core.entity.base.RelGoodsRecommend" useGeneratedKeys="true" keyProperty="relId">
+        INSERT INTO shop_rel_goods_recommend(recommend_id,goods_id)
+        VALUES(#{reCommendId},#{goodsId});
+    </insert>
+   
+    <delete id="delete" parameterType="java.lang.Integer">
+        delete from shop_rel_goods_recommend where rel_id = #{relId}
+    </delete>
+    
+      <!-- 获取商品的关联数据-->
+    <select id="findgoodsList" resultMap="BaseResultMap" parameterType="com.leimingtech.core.entity.base.RelGoodsRecommend">
+	       select sr.*,sg.* from shop_rel_goods_recommend sr left join shop_goods sg on 
+	       sr.goods_id=sg.goods_id where sr.recommend_id = #{reCommendId}
+	         <if test="goods.goodsShow!= null">
+	                and sg.goods_show = #{goods.goodsShow}
+	         </if>
+	         <if test="goods.goodsState!= null">
+	                and sg.goods_state = #{goods.goodsState}
+	         </if>
+	         <if test="goods.goodsName!= null and goods.goodsName!=''">
+	                and sg.goods_name like CONCAT('%',#{goods.goodsName},'%')
+	         </if>
+	         order by sr.sort,sr.rel_id desc
+    </select>
+    
+    <!-- 获取商品ids-->
+    <select id="findgoodsids" resultMap="BaseResultMap" parameterType="java.lang.Integer">
+          select sr.* from shop_rel_goods_recommend sr where sr.recommend_id=#{reCommendId}
+    </select>
+    
+    <!--修改-->
+    <update id="updaterel" parameterType="com.leimingtech.core.entity.base.RelGoodsRecommend">
+        update shop_rel_goods_recommend
+        <set>
+            <if test="sort != null">
+                sort = #{sort}
+            </if>
+        </set>
+        where rel_id=#{relId}
+    </update>
+</mapper>

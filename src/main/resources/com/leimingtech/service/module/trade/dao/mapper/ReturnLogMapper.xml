@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.leimingtech.service.module.trade.dao.mapper.ReturnLogMapper">
+	<resultMap id="BaseResultMap" type="com.leimingtech.core.entity.base.ReturnLog">
+		<id column="id" property="id" jdbcType="INTEGER" />
+		<result column="return_id" property="returnId" jdbcType="INTEGER" />
+		<result column="return_state" property="returnState" jdbcType="VARCHAR" />
+		<result column="change_state" property="changeState" jdbcType="VARCHAR" />
+		<result column="state_info" property="stateInfo" jdbcType="VARCHAR" />
+		<result column="operator" property="operator" jdbcType="VARCHAR" />
+		<result column="create_time" property="createTime" jdbcType="BIGINT" />
+	</resultMap>
+	
+	<!-- 全部查询字段 -->
+	<sql id="Base_Column_List">
+		id,return_id,return_state,change_state,state_info,operator,create_time
+	</sql>
+	
+	<!-- 保存退货日志 -->
+	<insert id="saveReturnLog" parameterType="com.leimingtech.core.entity.base.ReturnLog" useGeneratedKeys="true" keyProperty="id">
+		insert into shop_return_log
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			id,return_id,return_state,change_state,state_info,operator,create_time
+		</trim>
+		<trim prefix="values (" suffix=")" suffixOverrides=",">
+			#{id},#{returnId},#{returnState},#{changeState},#{stateInfo},#{operator},#{createTime}
+		</trim>
+	</insert>
+	
+	<!-- 修改退货日志 -->
+	<update id="updateReturnLog" parameterType="com.leimingtech.core.entity.base.ReturnLog">
+		update shop_return_log
+		<set>
+			<if test="returnState != null and returnState != '' ">
+				return_state = #{returnState},
+			</if>
+			<if test="changeState != null and changeState != '' ">
+				change_state = #{changeState},
+			</if>
+			<if test="stateInfo != null and stateInfo != '' ">
+				state_info = #{stateInfo},
+			</if>
+			<if test="operator != null and operator != '' ">
+				operator = #{operator},
+			</if>
+			<if test="createTime != null">
+				create_time = #{createTime},
+			</if>
+		</set>
+		where id = #{id}
+	</update>
+	
+	<!-- 根据id删除退货日志 -->
+	<delete id="deleteReturnLogById" parameterType="int">
+		delete from shop_return_log where id = #{id}
+	</delete>
+	
+	<!-- 根据退货表id查询退货日志表信息 -->
+	<select id="findListByReturnId" parameterType="int" resultMap="BaseResultMap">
+		select <include refid="Base_Column_List" /> from shop_return_log where return_id = #{returnId} order by create_time desc
+	</select>
+	
+</mapper>

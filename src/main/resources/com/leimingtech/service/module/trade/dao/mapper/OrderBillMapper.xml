@@ -1,0 +1,446 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.leimingtech.service.module.trade.dao.mapper.OrderBillMapper">
+	<resultMap id="BaseResultMap" type="com.leimingtech.core.entity.base.OrderBill">
+		<result column="ob_id" property="obId" jdbcType="INTEGER"/>		
+		<result column="ob_no" property="obNo" jdbcType="VARCHAR"/>
+		<result column="ob_start_time" property="obStartTime" jdbcType="BIGINT"/>
+		<result column="ob_end_time" property="obEndTime" jdbcType="BIGINT"/>
+		<result column="ob_order_totals" property="obOrderTotals" jdbcType="DECIMAL"/>
+		<result column="ob_shipping_totals" property="obShippingTotals" jdbcType="DECIMAL"/>
+		<result column="ob_order_return_totals" property="obOrderReturnTotals" jdbcType="DECIMAL"/>
+		<result column="ob_commis_totals" property="obCommisTotals" jdbcType="DECIMAL"/>
+		<result column="ob_commis_return_totals" property="obCommisReturnTotals" jdbcType="DECIMAL"/>
+		<result column="ob_store_cost_totals" property="obStoreCostTotals" jdbcType="DECIMAL"/>	
+		<result column="ob_result_totals" property="obResultTotals" jdbcType="DECIMAL"/>
+		<result column="create_time" property="createTime" jdbcType="BIGINT"/>
+		<result column="os_month" property="osMonth" jdbcType="INTEGER"/>
+		<result column="os_year" property="osYear" jdbcType="INTEGER"/>
+		<result column="ob_state" property="obState" jdbcType="INTEGER"/>
+		<result column="ob_pay_time" property="obPayTime" jdbcType="BIGINT"/>
+		<result column="ob_pay_content" property="obPayContent" jdbcType="VARCHAR"/>
+		<result column="ob_store_id" property="obStoreId" jdbcType="INTEGER"/>
+		<result column="ob_store_name" property="obStoreName" jdbcType="VARCHAR"/>
+	</resultMap>
+	
+	<!-- 结算信息导出excel实体 -->
+	<resultMap id="ExcelVoMap" type="com.leimingtech.core.entity.vo.OrderBillExcelVo">
+		<result column="ob_no" property="obNo" jdbcType="VARCHAR"/>
+		<result column="ob_order_totals" property="obOrderTotals" jdbcType="DECIMAL"/>
+		<result column="ob_shipping_totals" property="obShippingTotals" jdbcType="DECIMAL"/>
+		<result column="ob_order_return_totals" property="obOrderReturnTotals" jdbcType="DECIMAL"/>
+		<result column="ob_commis_totals" property="obCommisTotals" jdbcType="DECIMAL"/>
+		<result column="ob_commis_return_totals" property="obCommisReturnTotals" jdbcType="DECIMAL"/>
+		<result column="ob_store_cost_totals" property="obStoreCostTotals" jdbcType="DECIMAL"/>	
+		<result column="ob_result_totals" property="obResultTotals" jdbcType="DECIMAL"/>
+		<result column="os_month" property="osMonth" jdbcType="INTEGER"/>
+		<result column="os_year" property="osYear" jdbcType="INTEGER"/>
+		<result column="ob_store_id" property="obStoreId" jdbcType="INTEGER"/>
+		<result column="ob_store_name" property="obStoreName" jdbcType="VARCHAR"/>
+	</resultMap>
+	
+	<!-- 结算管理总账单vo -->	
+	<resultMap id="BillVoMap" type="com.leimingtech.core.entity.vo.BillVo">
+		<result column="obOrderTotals" property="obOrderTotals" jdbcType="DECIMAL" />
+		<result column="obShippingTotals" property="obShippingTotals" jdbcType="DECIMAL" />
+		<result column="obOrderReturnTotals" property="obOrderReturnTotals" jdbcType="DECIMAL" />
+		<result column="obCommisTotals" property="obCommisTotals" jdbcType="DECIMAL" />
+		<result column="obCommisReturnTotals" property="obCommisReturnTotals" jdbcType="DECIMAL" />
+		<result column="obStoreCostTotals" property="obStoreCostTotals" jdbcType="DECIMAL" /> 
+		<result column="obResultTotals" property="obResultTotals" jdbcType="DECIMAL" />
+		<result column="ob_store_id" property="storeId" jdbcType="INTEGER"/>
+		<result column="ob_store_name" property="storeName" jdbcType="VARCHAR"/>
+		<result column="ob_start_time" property="obStartTime" jdbcType="BIGINT"/>
+		<result column="ob_end_time" property="obEndTime" jdbcType="BIGINT"/>
+	</resultMap>
+	
+	<!-- 结算管理总账单excel超类 -->
+	<resultMap id="BillExcelVoMap" type="com.leimingtech.core.entity.vo.BillExcelVo">
+		<result column="obOrderTotals" property="obOrderTotals" jdbcType="DECIMAL" />
+		<result column="obShippingTotals" property="obShippingTotals" jdbcType="DECIMAL" />
+		<result column="obOrderReturnTotals" property="obOrderReturnTotals" jdbcType="DECIMAL" />
+		<result column="obCommisTotals" property="obCommisTotals" jdbcType="DECIMAL" />
+		<result column="obCommisReturnTotals" property="obCommisReturnTotals" jdbcType="DECIMAL" />
+		<result column="obStoreCostTotals" property="obStoreCostTotals" jdbcType="DECIMAL" /> 
+		<result column="obResultTotals" property="obResultTotals" jdbcType="DECIMAL" />
+		<result column="ob_store_name" property="storeName" jdbcType="VARCHAR"/>
+	</resultMap>
+	
+	<!-- 全部查询字段 -->
+	<sql id="Base_Column_List">
+		ob_id, ob_no, ob_start_time, ob_end_time, ob_order_totals, ob_shipping_totals, ob_order_return_totals,
+		ob_commis_totals, ob_commis_return_totals, ob_store_cost_totals, ob_result_totals, create_time, os_month,
+		os_year, ob_state, ob_pay_time, ob_pay_content, ob_store_id, ob_store_name
+	</sql>
+	
+	<!-- 导出excel所需查询字段 -->
+	<sql id="ExcelVo_Column_List">
+		ob_no, ob_order_totals, ob_shipping_totals, ob_order_return_totals,
+		ob_commis_totals, ob_commis_return_totals, ob_store_cost_totals, ob_result_totals, os_month,
+		os_year, ob_store_id, ob_store_name
+	</sql>
+	
+	<!-- 结算管理总账单所需查询字段 -->
+	<sql id="BillVo_Column_List">
+		sum(ob_order_totals) as obOrderTotals, sum(ob_shipping_totals) as obShippingTotals,
+		sum(ob_order_return_totals) as obOrderReturnTotals, sum(ob_commis_totals) as obCommisTotals,
+		sum(ob_commis_return_totals) as obCommisReturnTotals, sum(ob_store_cost_totals) as obStoreCostTotals,
+		sum(ob_result_totals) as obResultTotals, ob_store_id, ob_store_name, ob_start_time, ob_end_time
+	</sql>
+	
+	<sql id="Bill_ExcelVo_Column_List">
+		sum(ob_order_totals) as obOrderTotals, sum(ob_shipping_totals) as obShippingTotals,
+		sum(ob_order_return_totals) as obOrderReturnTotals, sum(ob_commis_totals) as obCommisTotals,
+		sum(ob_commis_return_totals) as obCommisReturnTotals, sum(ob_store_cost_totals) as obStoreCostTotals,
+		sum(ob_result_totals) as obResultTotals, ob_store_id, ob_store_name
+	</sql>
+	
+	<sql id="whereStatement">
+		<where>
+			1=1
+			<if test="condition.obNo != null and condition.obNo != '' ">
+	          	and ob_no like concat('%',#{condition.obNo, jdbcType=VARCHAR},'%')
+	        </if>
+	        <if test="condition.obStoreName != null and condition.obStoreName != '' ">
+	          	and ob_store_name like concat('%',#{condition.obStoreName, jdbcType=VARCHAR},'%')
+	        </if>
+			<if test="condition.obStartTime != null">
+				and ob_start_time &gt;= #{condition.obStartTime}
+			</if>
+			<if test="condition.obEndTime != null">
+				and ob_end_time &lt;= #{condition.obEndTime}
+			</if>
+			<if test="condition.startTime != null">
+				and create_time &gt;= #{condition.startTime}   
+			</if>
+			<if test="condition.endTime != null">
+				and create_time &lt; #{condition.endTime} 
+			</if>
+			<if test="condition.obStoreId != null">
+				and ob_store_id = #{condition.obStoreId} 
+			</if>
+			<if test="condition.osMonth != null">
+				and os_month = #{condition.osMonth} 
+			</if>
+			<if test="condition.osYear != null">
+				and os_year = #{condition.osYear} 
+			</if>
+			<if test="condition.obState != null">
+				and ob_state = #{condition.obState}
+			</if>
+		</where>
+	</sql>
+	
+	<sql id="whereStatement1">
+		<where>
+			1=1
+			<if test="obNo != null and obNo != '' ">
+	          	and ob_no like concat('%',#{obNo, jdbcType=VARCHAR},'%')
+	        </if>
+			<if test="obStartTime != null">
+				and ob_start_time &gt;= #{obStartTime}
+			</if>
+			<if test="obEndTime != null">
+				and ob_end_time &lt;= #{obEndTime}
+			</if>
+			<if test="startTime != null">
+				and create_time &gt;= #{startTime}   
+			</if>
+			<if test="endTime != null">
+				and create_time &lt; #{endTime} 
+			</if>
+			<if test="obStoreId != null">
+				and ob_store_id = #{obStoreId} 
+			</if>
+			<if test="obStoreName != null and obStoreName != '' ">
+	          	and ob_store_name like concat('%',#{obStoreName, jdbcType=VARCHAR},'%')
+	        </if>
+			<if test="osMonth != null">
+				and os_month = #{osMonth} 
+			</if>
+			<if test="osYear != null">
+				and os_year = #{osYear} 
+			</if>
+			<if test="obState != null">
+				and ob_state = #{obState}
+			</if>
+		</where>
+	</sql>
+	
+	<!-- 结算管理总账单分页查询条件 -->
+	<sql id="whereByBillVo">
+		where 1 = 1
+		<if test="condition.storeName != null and condition.storeName != '' ">
+			and ob_store_name like concat('%',#{condition.storeName, jdbcType=VARCHAR},'%')
+		</if>
+		<if test="condition.obStartTime != null">
+			and ob_start_time &gt;= #{condition.obStartTime}
+		</if>
+		<if test="condition.obEndTime != null">
+			and ob_end_time &lt;= #{condition.obEndTime}
+		</if>		
+	</sql>
+	
+	<!-- 结算管理总账单查询条件 -->
+	<sql id="whereByBillVoDetail">
+		where 1 = 1
+		<if test="storeId">
+			and ob_store_id = #{storeId}
+		</if>
+		<if test="obStartTime != null">
+			and ob_start_time &gt;= #{obStartTime}
+		</if>
+		<if test="obEndTime != null">
+			and ob_end_time &lt;= #{obEndTime}
+		</if>
+		<if test="storeName != null and storeName != '' ">
+			and ob_store_name like concat('%',#{storeName, jdbcType=VARCHAR},'%')
+		</if>
+	</sql>
+	
+	<!-- 保存结算表 -->
+	<insert id="saveOrderBill" parameterType="com.leimingtech.core.entity.base.OrderBill" useGeneratedKeys="true" keyProperty="obId">
+		insert into shop_order_bill
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="obNo != null and obNo != ''">
+				ob_no,
+			</if>
+			<if test="obStartTime != null">
+				ob_start_time,
+			</if>
+			<if test="obEndTime != null">
+				ob_end_time,
+			</if>
+			<if test="obOrderTotals != null">
+				ob_order_totals,
+			</if>
+			<if test="obShippingTotals != null">
+				ob_shipping_totals,
+			</if>
+			<if test="obOrderReturnTotals != null">
+				ob_order_return_totals,
+			</if>
+			<if test="obCommisTotals != null">
+				ob_commis_totals,
+			</if>
+			<if test="obCommisReturnTotals != null">
+				ob_commis_return_totals,
+			</if>
+			<if test="obStoreCostTotals != null">
+				ob_store_cost_totals,
+			</if>
+			<if test="obResultTotals != null">
+				ob_result_totals,
+			</if>
+			<if test="createTime != null">
+				create_time,
+			</if>
+			<if test="osMonth != null">
+				os_month,
+			</if>
+			<if test="osYear != null">
+				os_year,
+			</if>
+			<if test="obState != null">
+				ob_state,
+			</if>
+			<if test="obPayTime != null">
+				ob_pay_time,
+			</if>
+			<if test="obPayContent != null and obPayContent != ''">
+				ob_pay_content,
+			</if>
+			<if test="obStoreId != null">
+				ob_store_id,
+			</if>
+			<if test="obStoreName != null and obStoreName != ''">
+				ob_store_name,
+			</if>
+		</trim>
+		<trim prefix="values (" suffix=")" suffixOverrides=",">
+			<if test="obNo != null and obNo != ''">
+				#{obNo},
+			</if>
+			<if test="obStartTime != null">
+				#{obStartTime},
+			</if>
+			<if test="obEndTime != null">
+				#{obEndTime},
+			</if>
+			<if test="obOrderTotals != null">
+				#{obOrderTotals},
+			</if>
+			<if test="obShippingTotals != null">
+				#{obShippingTotals},
+			</if>
+			<if test="obOrderReturnTotals != null">
+				#{obOrderReturnTotals},
+			</if>
+			<if test="obCommisTotals != null">
+				#{obCommisTotals},
+			</if>
+			<if test="obCommisReturnTotals != null">
+				#{obCommisReturnTotals},
+			</if>
+			<if test="obStoreCostTotals != null">
+				#{obStoreCostTotals},
+			</if>
+			<if test="obResultTotals != null">
+				#{obResultTotals},
+			</if>
+			<if test="createTime != null">
+				#{createTime},
+			</if>
+			<if test="osMonth != null">
+				#{osMonth},
+			</if>
+			<if test="osYear != null">
+				#{osYear},
+			</if>
+			<if test="obState != null">
+				#{obState},
+			</if>
+			<if test="obPayTime != null">
+				#{obPayTime},
+			</if>
+			<if test="obPayContent != null and obPayContent != ''">
+				#{obPayContent},
+			</if>
+			<if test="obStoreId != null">
+				#{obStoreId},
+			</if>
+			<if test="obStoreName != null and obStoreName != ''">
+				#{obStoreName},
+			</if>
+		</trim>
+	</insert>
+	
+	<!-- 修改结算表 -->
+	<update id="updateOrderBill" parameterType="com.leimingtech.core.entity.base.OrderBill">
+		update shop_order_bill
+		<set>
+			<if test="obNo != null and obNo != ''">
+				ob_no = #{obNo},
+			</if>
+			<if test="obStartTime != null">
+				ob_start_time = #{obStartTime},
+			</if>
+			<if test="obEndTime != null">
+				ob_end_time = #{obEndTime},
+			</if>
+			<if test="obOrderTotals != null">
+				ob_order_totals = #{obOrderTotals},
+			</if>
+			<if test="obShippingTotals != null">
+				ob_shipping_totals = #{obShippingTotals},
+			</if>
+			<if test="obOrderReturnTotals != null">
+				ob_order_return_totals = #{obOrderReturnTotals},
+			</if>
+			<if test="obCommisTotals != null">
+				ob_commis_totals = #{obCommisTotals},
+			</if>
+			<if test="obCommisReturnTotals != null">
+				ob_commis_return_totals = #{obCommisReturnTotals},
+			</if>
+			<if test="obStoreCostTotals != null">
+				ob_store_cost_totals = #{obStoreCostTotals},
+			</if>
+			<if test="obResultTotals != null">
+				ob_result_totals = #{obResultTotals},
+			</if>
+			<if test="createTime != null">
+				create_time = #{createTime},
+			</if>
+			<if test="osMonth != null">
+				os_month = #{osMonth},
+			</if>
+			<if test="osYear != null">
+				os_year = #{osYear},
+			</if>
+			<if test="obState != null">
+				ob_state = #{obState},
+			</if>
+			<if test="obPayTime != null">
+				ob_pay_time = #{obState},
+			</if>
+			<if test="obPayContent != null and obPayContent != ''">
+				ob_pay_content = #{obPayContent},
+			</if>
+			<if test="obStoreId != null">
+				ob_store_id = #{obStoreId},
+			</if>
+			<if test="obStoreName != null and obStoreName != ''">
+				ob_store_name = #{obStoreName},
+			</if>
+		</set>	
+		where ob_id = #{obId}
+	</update>
+	
+	<!-- 根据id查询结算表 -->
+	<select id="findOrderBillById" resultMap="BaseResultMap" parameterType="com.leimingtech.core.entity.base.OrderBill">
+		select <include refid="Base_Column_List" /> from shop_order_bill where ob_id = #{obId}
+	</select>
+	
+	<!-- 查询分页结算表数据 -->
+	<select id="findOrderBillPagerList" parameterType="com.leimingtech.service.utils.page.Pager" resultMap="BaseResultMap">
+		SELECT s.* from( select c.* from shop_order_bill c
+		<include refid="whereStatement" />
+			order by ob_store_id asc, create_time desc
+		) s
+	</select>
+	
+	<!-- 获取所有结算表数据 -->
+	<select id="findOrderBillAllList" resultMap="BaseResultMap">
+		select <include refid="Base_Column_List" /> from shop_order_bill
+		order by create_time desc
+	</select>
+	
+	<!-- 条件查询结算信息(无分页) -->
+	<select id="findOrderBillList" parameterType="com.leimingtech.core.entity.base.OrderBill" resultMap="BaseResultMap">
+		select <include refid="Base_Column_List" /> from shop_order_bill
+		<include refid="whereStatement1" />
+		order by create_time desc
+	</select>
+	
+	<!-- 条件查询结算详情,必传结算id -->
+	<select id="findOrderBillDetail" parameterType="com.leimingtech.core.entity.base.OrderBill" resultMap="BaseResultMap">
+		select <include refid="Base_Column_List" /> from shop_order_bill
+		<include refid="whereStatement1" /> 
+		and ob_id = #{obId}
+	</select>
+	
+	<!-- 条件查询结算excel信息 -->
+	<select id="findExcelVoList" parameterType="com.leimingtech.core.entity.base.OrderBill" resultMap="ExcelVoMap">
+		select <include refid="ExcelVo_Column_List" /> from shop_order_bill
+		<include refid="whereStatement1" />
+		order by create_time desc
+	</select>
+	
+	<!-- 分页查询结算管理总账单 -->
+	<select id="findBillVoPagerList" parameterType="com.leimingtech.service.utils.page.Pager" resultMap="BillVoMap">
+		select <include refid="BillVo_Column_List" /> from shop_order_bill
+		<include refid="whereByBillVo" />
+		group by ob_store_id,ob_start_time order by ob_store_id
+	</select>
+	
+	<!-- 查询结算管理总账单条数 -->
+	<select id="findBillVoCount" parameterType="com.leimingtech.core.entity.vo.BillVo" resultType="int">
+		select count(1) from shop_order_bill
+		<include refid="whereByBillVoDetail" />
+	</select>
+	
+	<!-- 查询店铺下的总帐单 -->
+	<select id="findBillVoDetail" parameterType="com.leimingtech.core.entity.vo.BillVo" resultMap="BillVoMap">
+		select <include refid="BillVo_Column_List" /> from shop_order_bill
+		<include refid="whereByBillVoDetail" />
+		group by ob_store_id,ob_start_time
+	</select>
+	
+	<!-- 条件查询结算管理总账单excel信息 -->
+	<select id="findBillExcelVoList" parameterType="com.leimingtech.core.entity.vo.BillVo" resultMap="BillExcelVoMap">
+		select <include refid="Bill_ExcelVo_Column_List" /> from shop_order_bill
+		<include refid="whereByBillVoDetail" />
+		group by ob_store_id,ob_start_time order by ob_store_id
+	</select>
+</mapper>

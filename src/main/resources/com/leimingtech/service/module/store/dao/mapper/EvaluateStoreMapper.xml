@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper
+	namespace="com.leimingtech.service.module.store.dao.mapper.EvaluateStoreMapper">
+	<resultMap id="BaseResultMap" type="com.leimingtech.core.entity.base.EvaluateStore">
+		<result column="seval_desccredit" property="sevalDesccredit"
+			jdbcType="DOUBLE" />
+		<result column="seval_servicecredit" property="sevalServicecredit"
+			jdbcType="DOUBLE" />
+		<result column="seval_deliverycredit" property="sevalDeliverycredit"
+			jdbcType="DOUBLE" />
+		<result column="count" property="count" jdbcType="INTEGER" />
+	</resultMap>
+    
+    <resultMap id="BaseResultMap2" type="com.leimingtech.core.entity.base.EvaluateStore">
+		<result column="seval_storeid" property="sevalStoreId"
+			jdbcType="INTEGER" />
+		<result column="create_time" property="createTime"
+			jdbcType="DOUBLE" />
+		<result column="average_fen" property="averageCredits" jdbcType="DOUBLE" />
+	</resultMap>
+    
+	<sql id="Base_Column_List">
+		AVG(seval_desccredit) AS seval_desccredit,
+		AVG(seval_servicecredit) AS seval_servicecredit,
+		AVG(seval_deliverycredit) AS seval_deliverycredit,
+		COUNT(seval_id) AS count
+	</sql>
+
+    <insert id="save" parameterType="com.leimingtech.core.entity.base.EvaluateStore" useGeneratedKeys="true">
+        insert into shop_evaluate_store (seval_orderid,seval_orderno,seval_addtime,seval_storeid,seval_storename
+        ,seval_memberid,seval_membername,seval_desccredit,seval_servicecredit,seval_deliverycredit,is_del,create_time)
+        values (#{sevalOrderId},#{sevalOrderNo},#{createTime},#{sevalStoreId},#{sevalStoreName},#{sevalMemberId},#{sevalMemberName},
+        #{sevalDesccredit},#{sevalServicecredit},#{sevalDeliverycredit},0,#{createTime})
+    </insert>
+
+	<select id="findEvaluateStore" resultMap="BaseResultMap" parameterType="integer">
+		select
+		<include refid="Base_Column_List" />
+		from shop_evaluate_store where seval_storeid = #{id} and
+		is_del = 0
+	</select>
+
+   <select id="findEvaluate" resultMap="BaseResultMap2">
+		select seval_storeid,create_time,(seval_desccredit+seval_servicecredit+seval_servicecredit)/3 as average_fen
+        from shop_evaluate_store where  is_del = 0
+        <if test="sevalStoreId != null">
+                and seval_storeid = #{sevalStoreId,jdbcType=INTEGER}
+        </if>
+         <if test="halfyearTime != null and nowtime!=null">
+                and create_time &gt;=#{nowtime} and create_time &lt;= #{halfyearTime}
+        </if>
+	</select>
+</mapper>

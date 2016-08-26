@@ -1,0 +1,142 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.leimingtech.service.module.goods.dao.mapper.GoodsTypeMapper">
+    <resultMap id="BaseResultMap" type="com.leimingtech.core.entity.GoodsType" >
+        <id column="type_id" property="typeId" jdbcType="INTEGER" />
+        <result column="type_name" property="typeName" jdbcType="VARCHAR" />
+        <result column="type_sort" property="typeSort" jdbcType="INTEGER" />
+   <!-- <result column="st_parent_id" property="parentId" jdbcType="INTEGER" />
+        <result column="st_idpath" property="idPath" jdbcType="VARCHAR" />
+        <result column="expen_scale" property="expenScale" jdbcType="FLOAT" />
+        <result column="has_child" property="hasChild" jdbcType="INTEGER" />
+       <collection property="typeList" ofType="com.leimingtech.core.entity.GoodsType"
+                    column="type_id" javaType="arraylist"
+                    select="com.leimingtech.service.module.goods.dao.mapper.GoodsTypeMapper.findChild">
+        </collection> -->
+    </resultMap>
+    
+    <resultMap type="com.leimingtech.core.entity.GoodsType" id="TypeResultMap">
+        <id column="type_id" property="typeId" jdbcType="INTEGER" />
+        <result column="type_name" property="typeName" jdbcType="VARCHAR" />
+        <result column="type_sort" property="typeSort" jdbcType="INTEGER" />
+        <collection property="attributes" ofType="com.leimingtech.core.entity.GoodsAttribute"
+                    column="type_id" javaType="arraylist"
+                    select="com.leimingtech.service.module.goods.dao.mapper.GoodsAttributeMapper.findListByType">
+        </collection>
+        <collection property="tbs" ofType="com.leimingtech.core.entity.base.TypeBrand"
+                    column="type_id" javaType="arraylist"
+                    select="com.leimingtech.service.module.goods.dao.mapper.TypeBrandMapper.findListByType">
+        </collection>
+        <collection property="tsList" ofType="com.leimingtech.core.entity.base.TypeSpec"
+                    column="type_id" javaType="arraylist"
+                    select="com.leimingtech.service.module.goods.dao.mapper.TypeSpecMapper.findListByType">
+        </collection>
+    </resultMap>
+    
+    <resultMap type="com.leimingtech.core.entity.vo.GoodsTypeVO" id="BaseVOMap">
+    	<id column="type_id" property="typeId" jdbcType="INTEGER" />
+        <result column="type_name" property="typeName" jdbcType="VARCHAR" />
+        <result column="type_sort" property="typeSort" jdbcType="INTEGER" />
+       <!--  <result column="st_parent_id" property="parentId" jdbcType="INTEGER" />
+        <result column="st_idpath" property="idPath" jdbcType="VARCHAR" />
+        <result column="expen_scale" property="expenScale" jdbcType="FLOAT" /> -->
+        <collection property="attributes" ofType="com.leimingtech.core.entity.GoodsAttribute"
+                    column="type_id" javaType="arraylist"
+                    select="com.leimingtech.service.module.goods.dao.mapper.GoodsAttributeMapper.findListByType">
+        </collection>
+        <collection property="brandList" ofType="com.leimingtech.core.entity.base.Brand"
+                    column="type_id" javaType="arraylist"
+                    select="com.leimingtech.service.module.goods.dao.mapper.BrandMapper.findListByType">
+        </collection>
+        <collection property="specList" ofType="com.leimingtech.core.entity.Spec"
+                    column="type_id" javaType="arraylist"
+                    select="com.leimingtech.service.module.goods.dao.mapper.SpecMapper.findListByType">
+        </collection>
+    </resultMap>
+    
+
+    <sql id="Base_Column_List" >
+        type_id, type_name, type_sort
+    </sql>
+    <insert id="save" parameterType="com.leimingtech.core.entity.GoodsType" useGeneratedKeys="true" keyProperty="typeId">
+        INSERT INTO shop_type(type_name,type_sort)
+        VALUES(#{typeName},#{typeSort});
+    </insert>
+    <update id="update" parameterType="com.leimingtech.core.entity.GoodsType">
+        update shop_type
+        <set>
+            <if test="typeName != null">
+                type_name = #{typeName},
+            </if>
+            <if test="typeSort != null">
+                type_sort = #{typeSort}
+            </if>
+            <!-- <if test="idPath != null and idPath!=''">
+                st_idpath = #{idPath},
+            </if>
+            <if test="expenScale != null">
+                expen_scale = #{expenScale}
+            </if> -->
+        </set>
+        where type_id=#{typeId}
+    </update>
+    <delete id="delete" parameterType="java.lang.Integer">
+        delete from shop_type where type_id = #{typeId}
+    </delete>
+
+    <select id="findById" resultMap="BaseResultMap" parameterType="java.lang.Integer">
+        select
+        <include refid="Base_Column_List" />
+        from shop_type where type_id=#{typeId}
+    </select>
+	
+	<!-- 查询所有的商品类型 -->
+    <select id="findList" resultMap="BaseResultMap" >
+        SELECT
+        <include refid="Base_Column_List" />
+        FROM shop_type
+        order by type_sort
+    </select>
+
+    <!--关联查询-->
+    <select id="selectTypeFetchOther" parameterType="int" resultMap="BaseVOMap" >
+        SELECT
+          *
+        FROM
+          shop_type gt
+        WHERE
+           gt.type_id = #{typeId}
+    </select>
+
+    <select id="findCount" resultType="int" parameterType="com.leimingtech.service.utils.page.Pager">
+        select count(*) from shop_type
+    </select>
+
+    <select id="findPageList" resultMap="BaseResultMap" parameterType="com.leimingtech.service.utils.page.Pager">
+        select a.* from(
+        SELECT
+        <include refid="Base_Column_List" />
+        FROM shop_type
+        order by type_sort) a
+    </select>
+    
+     <!--根据父id查询分类列表-->
+    <select id="findList2" resultMap="BaseResultMap" parameterType="java.lang.Integer">
+        SELECT
+        <include refid="Base_Column_List" />,
+        (select count(*) from shop_type s1 where s1.st_parent_id=s.type_id) has_child
+        FROM shop_type s
+        where  st_parent_id = #{parentId}
+        order by type_sort
+    </select>
+    
+    <select id="findChild" resultMap="BaseResultMap" parameterType="int">
+        SELECT
+        <include refid="Base_Column_List" />,
+        (select count(*) from shop_type s1 where s1.st_parent_id=s.type_id ) has_child
+        FROM shop_type s
+        where  st_parent_id = #{typeId} order by type_sort
+    </select>
+    
+    
+</mapper>

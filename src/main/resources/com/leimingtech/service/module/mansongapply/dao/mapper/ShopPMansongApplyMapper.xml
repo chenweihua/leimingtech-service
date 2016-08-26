@@ -1,0 +1,194 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.leimingtech.service.module.mansongapply.dao.mapper.ShopPMansongApplyMapper">
+	
+	<resultMap id="BaseResultMap" type="com.leimingtech.core.entity.base.ShopPMansongApply">
+		<result column="apply_id" property="applyId" jdbcType="INTEGER" />
+		<result column="member_id" property="memberId" jdbcType="INTEGER" />
+		<result column="member_name" property="memberName" jdbcType="VARCHAR" />
+		<result column="store_id" property="storeId" jdbcType="INTEGER" />
+		<result column="store_name" property="storeName" jdbcType="VARCHAR" />
+		<result column="apply_quantity" property="applyQuantity" jdbcType="INTEGER" />
+		<result column="apply_date" property="applyDate" jdbcType="INTEGER" />
+		<result column="state" property="state" jdbcType="INTEGER" />
+	</resultMap>
+    
+	<sql id="Base_Column_List">
+		apply_id,
+		member_id,
+		member_name,
+		store_id,
+		store_name,
+		apply_quantity,
+		apply_date,
+		state
+	</sql>
+	
+	<sql id="whereStatement">
+		<where>
+			1 = 1
+			<if test="condition !=null">
+				<if test="condition.applyId != null and condition.applyId != ''">
+					AND a.apply_id = #{applyId}
+				</if>
+				<if test="condition.memberId != null and condition.memberId != ''">
+					AND a.member_id = #{memberId}
+				</if>
+				<if test="condition.memberName != null and condition.memberName != ''">
+					AND a.member_name = #{memberName}
+				</if>
+				<if test="condition.storeId != null and condition.storeId != ''">
+					AND a.store_id = #{storeId}
+				</if>
+				<if test="condition.storeName != null and condition.storeName != ''">
+					AND a.store_name = #{storeName}
+				</if>
+				<if test="condition.applyQuantity != null and condition.applyQuantity != ''">
+					AND a.apply_quantity = #{applyQuantity}
+				</if>
+				<if test="condition.applyDate != null and condition.applyDate != ''">
+					AND a.apply_date = #{applyDate}
+				</if>
+				<if test="condition.state != null and condition.state != ''">
+					AND a.state = #{state}
+				</if>
+			</if>
+		</where>
+	</sql>
+	
+	<select id="findShopPMansongApplyPagerList" resultMap="BaseResultMap"
+		parameterType="com.leimingtech.service.utils.page.Pager">
+		
+		SELECT s.* from( select c.* from shop_p_mansong_apply c
+		<include refid="whereStatement" />
+		
+		<if test="orderBy == 0">
+			order by apply_id desc
+		</if>
+		<if test="orderBy == 1">
+			order by apply_id asc
+		</if>
+		) s
+		
+	</select>
+	
+	<select id="findShopPMansongApplyAllList" resultMap="BaseResultMap"
+		parameterType="com.leimingtech.core.entity.base.ShopPMansongApply">
+		SELECT
+		<include refid="Base_Column_List" />
+		from shop_p_mansong_apply c
+		<if test="orderBy == 0">
+			order by apply_id desc
+		</if>
+		<if test="orderBy == 1">
+			order by apply_id asc
+		</if>
+	</select>
+	
+	<select id="findShopPMansongApplyById" resultMap="BaseResultMap" parameterType="java.lang.Integer">
+
+		select
+		<include refid="Base_Column_List" />
+		from shop_p_mansong_apply c where apply_id = #{id}
+
+	</select>
+	
+	<delete id="deleteShopPMansongApplyById" parameterType="java.lang.Integer">
+		delete from
+		shop_p_mansong_apply where apply_id = #{id}
+	</delete>
+	
+	<insert id="saveShopPMansongApply" parameterType="com.leimingtech.core.entity.base.ShopPMansongApply"  useGeneratedKeys="true" keyProperty="id">
+
+		insert into shop_p_mansong_apply
+
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+
+			<if test="applyId != null ">
+			apply_id,
+			</if>
+			<if test="memberId != null ">
+			member_id,
+			</if>
+			<if test="memberName != null and memberName != ''">
+			member_name,
+			</if>
+			<if test="storeId != null ">
+			store_id,
+			</if>
+			<if test="storeName != null and storeName != ''">
+			store_name,
+			</if>
+			<if test="applyQuantity != null ">
+			apply_quantity,
+			</if>
+			<if test="applyDate != null ">
+			apply_date,
+			</if>
+			<if test="state != null ">
+			state,
+			</if>
+		</trim>
+
+		<trim prefix="values (" suffix=")" suffixOverrides=",">
+
+			<if test="applyId != null ">
+				#{applyId},
+			</if>
+			<if test="memberId != null ">
+				#{memberId},
+			</if>
+			<if test="memberName != null and memberName != ''">
+				#{memberName},
+			</if>
+			<if test="storeId != null ">
+				#{storeId},
+			</if>
+			<if test="storeName != null and storeName != ''">
+				#{storeName},
+			</if>
+			<if test="applyQuantity != null ">
+				#{applyQuantity},
+			</if>
+			<if test="applyDate != null ">
+				#{applyDate},
+			</if>
+			<if test="state != null ">
+				#{state},
+			</if>
+		</trim>
+
+	</insert>
+	
+	<update id="updateShopPMansongApply" parameterType="com.leimingtech.core.entity.base.ShopPMansongApply">
+
+		update shop_p_mansong_apply
+		<set>
+			<if test="memberId != null ">
+				member_id = #{memberId},
+			</if>
+			<if test="memberName != null and memberName != ''">
+				member_name = #{memberName},
+			</if>
+			<if test="storeId != null ">
+				store_id = #{storeId},
+			</if>
+			<if test="storeName != null and storeName != ''">
+				store_name = #{storeName},
+			</if>
+			<if test="applyQuantity != null ">
+				apply_quantity = #{applyQuantity},
+			</if>
+			<if test="applyDate != null ">
+				apply_date = #{applyDate},
+			</if>
+			<if test="state != null ">
+				state = #{state},
+			</if>
+		</set>
+
+		WHERE apply_id = #{id}
+
+	</update>
+	
+</mapper>

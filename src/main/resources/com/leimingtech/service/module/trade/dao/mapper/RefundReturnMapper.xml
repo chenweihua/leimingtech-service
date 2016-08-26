@@ -1,0 +1,571 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.leimingtech.service.module.trade.dao.mapper.RefundReturnMapper">
+	
+	<resultMap id="BaseResultMap" type="com.leimingtech.core.entity.base.RefundReturn">
+		<result column="refund_id" property="refundId" jdbcType="INTEGER" />
+		<result column="order_id" property="orderId" jdbcType="INTEGER" />
+		<result column="order_sn" property="orderSn" jdbcType="VARCHAR" />
+		<result column="refund_sn" property="refundSn" jdbcType="VARCHAR" />
+		<result column="store_id" property="storeId" jdbcType="INTEGER" />
+		<result column="store_name" property="storeName" jdbcType="VARCHAR" />
+		<result column="buyer_id" property="buyerId" jdbcType="INTEGER" />
+		<result column="buyer_name" property="buyerName" jdbcType="VARCHAR" />
+		<result column="goods_id" property="goodsId" jdbcType="INTEGER" />
+		<result column="order_goods_id" property="orderGoodsId" jdbcType="INTEGER" />
+		<result column="goods_name" property="goodsName" jdbcType="VARCHAR" />
+		<result column="goods_num" property="goodsNum" jdbcType="INTEGER" />
+		<result column="refund_amount" property="refundAmount" jdbcType="DECIMAL" />
+		<result column="goods_image" property="goodsImage" jdbcType="VARCHAR" />
+		<result column="order_goods_type" property="orderGoodsType" jdbcType="INTEGER" />
+		<result column="refund_type" property="refundType" jdbcType="INTEGER" />
+		<result column="seller_state" property="sellerState" jdbcType="INTEGER" />
+		<result column="refund_state" property="refundState" jdbcType="INTEGER" />
+		<result column="return_type" property="returnType" jdbcType="INTEGER" />
+		<result column="order_lock" property="orderLock" jdbcType="INTEGER" />
+		<result column="goods_state" property="goodsState" jdbcType="INTEGER" />
+		<result column="create_time" property="createTime" jdbcType="BIGINT" />
+		<result column="seller_time" property="sellerTime" jdbcType="BIGINT" />
+		<result column="admin_time" property="adminTime" jdbcType="BIGINT" />
+		<result column="reason_id" property="reasonId" jdbcType="INTEGER" />
+		<result column="reason_info" property="reasonInfo" jdbcType="VARCHAR" />
+		<result column="pic_info" property="picInfo" jdbcType="VARCHAR" />
+		<result column="buyer_message" property="buyerMessage" jdbcType="VARCHAR" />
+		<result column="seller_message" property="sellerMessage" jdbcType="VARCHAR" />
+		<result column="admin_message" property="adminMessage" jdbcType="VARCHAR" />
+		<result column="express_id" property="expressId" jdbcType="INTEGER" />
+		<result column="express_name" property="expressName" jdbcType="VARCHAR" />
+		<result column="invoice_no" property="invoiceNo" jdbcType="VARCHAR" />
+		<result column="ship_time" property="shipTime" jdbcType="BIGINT" />
+		<result column="delay_time" property="delayTime" jdbcType="BIGINT" />
+		<result column="receive_time" property="receiveTime" jdbcType="BIGINT" />
+		<result column="receive_message" property="receiveMessage" jdbcType="VARCHAR" />
+		<result column="commis_rate" property="commisRate" jdbcType="INTEGER" />
+		<result column="batch_no" property="batchNo" jdbcType="VARCHAR" />
+	</resultMap>
+	
+	<resultMap id="ReturnDetailVo" type="com.leimingtech.core.entity.vo.ReturnDetailVo" extends="BaseResultMap">
+		<collection property="orderDaddress" ofType="com.leimingtech.core.entity.base.OrderDaddress"
+                    column="order_id" javaType="com.leimingtech.core.entity.base.OrderDaddress"
+                    select="com.leimingtech.service.module.trade.dao.mapper.OrderDaddressMapper.findOrderDaddressByOrderId">
+        </collection>
+        <collection property="returnLogList" ofType="com.leimingtech.core.entity.base.ReturnLog"
+                    column="refund_id" javaType="arraylist"
+                    select="com.leimingtech.service.module.trade.dao.mapper.ReturnLogMapper.findListByReturnId">
+        </collection>
+	</resultMap>
+    
+	<sql id="Base_Column_List">
+		refund_id, order_id, order_sn, refund_sn, store_id, store_name, buyer_id, buyer_name,
+		goods_id, order_goods_id, goods_name, goods_num, refund_amount, goods_image, order_goods_type,
+		refund_type, seller_state, refund_state, return_type, order_lock, goods_state, create_time,
+		seller_time, admin_time, reason_id,	reason_info, pic_info, buyer_message, seller_message,
+		admin_message, express_id, express_name, invoice_no, ship_time, delay_time, receive_time,	
+		receive_message, commis_rate, batch_no
+	</sql>
+	
+	<sql id="whereStatement">
+		<where>
+			1 = 1
+			<if test="condition.orderSn !=null and condition.orderSn != '' ">
+				and order_sn like CONCAT('%',#{condition.orderSn, jdbcType=VARCHAR},'%')
+			</if>
+			<if test="condition.refundSn != null and condition.refundSn != '' ">
+				and refund_sn like CONCAT('%',#{condition.refundSn, jdbcType=VARCHAR},'%')
+			</if>
+			<if test="condition.storeName != null and condition.storeName != '' ">
+	          	and store_name like concat('%',#{condition.storeName, jdbcType=VARCHAR},'%')
+	        </if>
+	        <if test="condition.buyerName != null and condition.buyerName != '' ">
+	          	and buyer_name like concat('%',#{condition.buyerName, jdbcType=VARCHAR},'%')
+	        </if>
+			<if test="condition.buyerId != null">
+				and buyer_id = #{condition.buyerId}
+			</if>
+			<if test="condition.storeId != null">
+				and store_id = #{condition.storeId}
+			</if>
+			<if test="condition.sellerState != null">
+				and seller_state = #{condition.sellerState}
+			</if>
+			<if test="condition.refundState != null">
+				and refund_state = #{condition.refundState}
+			</if>
+			<if test="condition.goodsState != null">
+				and goods_state = #{condition.goodsState}
+			</if>
+			<if test="condition.startTime != null and condition.startTime != '' ">
+				and create_time &gt;= #{condition.startTime}   
+			</if>
+			<if test="condition.endTime != null and condition.endTime != '' ">
+				and create_time &lt; #{condition.endTime} 
+			</if>
+		</where>
+	</sql>
+	
+	<sql id="whereStatement1">
+		<where>
+			1 = 1
+			<if test="orderSn !=null and orderSn != '' ">
+				and order_sn like CONCAT('%',#{orderSn, jdbcType=VARCHAR},'%')
+			</if>
+			<if test="refundSn != null and refundSn != '' ">
+				and refund_sn like CONCAT('%',#{refundSn, jdbcType=VARCHAR},'%')
+			</if>
+			<if test="buyerId != null">
+				and buyer_id = #{buyerId}
+			</if>
+			<if test="storeId != null">
+				and store_id = #{storeId}
+			</if>
+			<if test="sellerState != null">
+				and seller_state = #{sellerState}
+			</if>
+			<if test="refundState != null">
+				and refund_state = #{refundState}
+			</if>
+			<if test="goodsState != null">
+				and goods_state = #{goodsState}
+			</if>
+			<if test="startTime != null and startTime != '' ">
+				and create_time &gt;= #{startTime}   
+			</if>
+			<if test="endTime != null and endTime != '' ">
+				and create_time &lt; #{endTime} 
+			</if>
+		</where>
+	</sql>
+	
+	<select id="findRefundReturnPagerList" resultMap="BaseResultMap"
+		parameterType="com.leimingtech.service.utils.page.Pager">
+		
+		SELECT s.* from( select c.* from shop_refund_return c
+		<include refid="whereStatement" />
+			order by create_time desc
+		) s
+		
+	</select>
+	
+	<select id="findRefundReturnAllList" resultMap="BaseResultMap"
+		parameterType="com.leimingtech.core.entity.base.RefundReturn">
+		SELECT
+		<include refid="Base_Column_List" />
+		from shop_refund_return
+		<include refid="whereStatement1" />
+		order by create_time desc
+	</select>
+	
+	<select id="findRefundReturnCount" resultType="int" parameterType="com.leimingtech.core.entity.base.RefundReturn">
+		select count(1)	from shop_refund_return
+		<include refid="whereStatement1"/>
+	</select>
+	
+	<select id="findRefundReturnById" resultMap="BaseResultMap" parameterType="java.lang.Integer">
+
+		select
+		<include refid="Base_Column_List" />
+		from shop_refund_return c where refund_id = #{refundId}
+
+	</select>
+	
+	<delete id="deleteRefundReturnById" parameterType="java.lang.Integer">
+		delete from
+		shop_refund_return where refund_id = #{refundId}
+	</delete>
+	
+	<insert id="saveRefundReturn" parameterType="com.leimingtech.core.entity.base.RefundReturn"  useGeneratedKeys="true" keyProperty="refundId">
+
+		insert into shop_refund_return
+
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="orderId != null ">
+			order_id,
+			</if>
+			<if test="orderSn != null and orderSn != ''">
+			order_sn,
+			</if>
+			<if test="refundSn != null and refundSn != ''">
+			refund_sn,
+			</if>
+			<if test="storeId != null ">
+			store_id,
+			</if>
+			<if test="storeName != null and storeName != ''">
+			store_name,
+			</if>
+			<if test="buyerId != null ">
+			buyer_id,
+			</if>
+			<if test="buyerName != null and buyerName != ''">
+			buyer_name,
+			</if>
+			<if test="goodsId != null ">
+			goods_id,
+			</if>
+			<if test="orderGoodsId != null ">
+			order_goods_id,
+			</if>
+			<if test="goodsName != null and goodsName != ''">
+			goods_name,
+			</if>
+			<if test="goodsNum != null ">
+			goods_num,
+			</if>
+			<if test="refundAmount != null">
+			refund_amount,
+			</if>
+			<if test="goodsImage != null and goodsImage != ''">
+			goods_image,
+			</if>
+			<if test="orderGoodsType != null">
+			order_goods_type,
+			</if>
+			<if test="refundType != null">
+			refund_type,
+			</if>
+			<if test="sellerState != null">
+			seller_state,
+			</if>
+			<if test="refundState != null">
+			refund_state,
+			</if>
+			<if test="returnType != null">
+			return_type,
+			</if>
+			<if test="orderLock != null">
+			order_lock,
+			</if>
+			<if test="goodsState != null">
+			goods_state,
+			</if>
+			<if test="createTime != null ">
+			create_time,
+			</if>
+			<if test="sellerTime != null ">
+			seller_time,
+			</if>
+			<if test="adminTime != null ">
+			admin_time,
+			</if>
+			<if test="reasonId != null ">
+			reason_id,
+			</if>
+			<if test="reasonInfo != null and reasonInfo != ''">
+			reason_info,
+			</if>
+			<if test="picInfo != null and picInfo != ''">
+			pic_info,
+			</if>
+			<if test="buyerMessage != null and buyerMessage != ''">
+			buyer_message,
+			</if>
+			<if test="sellerMessage != null and sellerMessage != ''">
+			seller_message,
+			</if>
+			<if test="adminMessage != null and adminMessage != ''">
+			admin_message,
+			</if>
+			<if test="expressId != null">
+			express_id,
+			</if>
+			<if test="expressName != null and expressName != '' ">
+			express_name,
+			</if>
+			<if test="invoiceNo != null and invoiceNo != ''">
+			invoice_no,
+			</if>
+			<if test="shipTime != null ">
+			ship_time,
+			</if>
+			<if test="delayTime != null ">
+			delay_time,
+			</if>
+			<if test="receiveTime != null ">
+			receive_time,
+			</if>
+			<if test="receiveMessage != null and receiveMessage != ''">
+			receive_message,
+			</if>
+			<if test="commisRate != null">
+			commis_rate,
+			</if>
+			<if test="batchNo != null and batchNo != '' ">
+			batch_no,
+			</if>
+		</trim>
+
+		<trim prefix="values (" suffix=")" suffixOverrides=",">
+			<if test="orderId != null ">
+				#{orderId},
+			</if>
+			<if test="orderSn != null and orderSn != ''">
+				#{orderSn},
+			</if>
+			<if test="refundSn != null and refundSn != ''">
+				#{refundSn},
+			</if>
+			<if test="storeId != null ">
+				#{storeId},
+			</if>
+			<if test="storeName != null and storeName != ''">
+				#{storeName},
+			</if>
+			<if test="buyerId != null ">
+				#{buyerId},
+			</if>
+			<if test="buyerName != null and buyerName != ''">
+				#{buyerName},
+			</if>
+			<if test="goodsId != null ">
+				#{goodsId},
+			</if>
+			<if test="orderGoodsId != null ">
+				#{orderGoodsId},
+			</if>
+			<if test="goodsName != null and goodsName != ''">
+				#{goodsName},
+			</if>
+			<if test="goodsNum != null ">
+				#{goodsNum},
+			</if>
+			<if test="refundAmount != null and refundAmount != ''">
+				#{refundAmount},
+			</if>
+			<if test="goodsImage != null and goodsImage != ''">
+				#{goodsImage},
+			</if>
+			<if test="orderGoodsType != null">
+				#{orderGoodsType},
+			</if>
+			<if test="refundType != null">
+				#{refundType},
+			</if>
+			<if test="sellerState != null">
+				#{sellerState},
+			</if>
+			<if test="refundState != null">
+				#{refundState},
+			</if>
+			<if test="returnType != null">
+				#{returnType},
+			</if>
+			<if test="orderLock != null">
+				#{orderLock},
+			</if>
+			<if test="goodsState != null">
+				#{goodsState},
+			</if>
+			<if test="createTime != null ">
+				#{createTime},
+			</if>
+			<if test="sellerTime != null ">
+				#{sellerTime},
+			</if>
+			<if test="adminTime != null ">
+				#{adminTime},
+			</if>
+			<if test="reasonId != null ">
+				#{reasonId},
+			</if>
+			<if test="reasonInfo != null and reasonInfo != ''">
+				#{reasonInfo},
+			</if>
+			<if test="picInfo != null and picInfo != ''">
+				#{picInfo},
+			</if>
+			<if test="buyerMessage != null and buyerMessage != ''">
+				#{buyerMessage},
+			</if>
+			<if test="sellerMessage != null and sellerMessage != ''">
+				#{sellerMessage},
+			</if>
+			<if test="adminMessage != null and adminMessage != ''">
+				#{adminMessage},
+			</if>
+			<if test="expressId != null">
+				#{expressId},
+			</if>
+			<if test="expressName != null and expressName != '' ">
+				#{expressName},
+			</if>
+			<if test="invoiceNo != null and invoiceNo != ''">
+				#{invoiceNo},
+			</if>
+			<if test="shipTime != null ">
+				#{shipTime},
+			</if>
+			<if test="delayTime != null ">
+				#{delayTime},
+			</if>
+			<if test="receiveTime != null ">
+				#{receiveTime},
+			</if>
+			<if test="receiveMessage != null and receiveMessage != ''">
+				#{receiveMessage},
+			</if>
+			<if test="commisRate != null">
+				#{commisRate},
+			</if>
+			<if test="batchNo != null and batchNo != '' ">
+				#{batchNo},
+			</if>
+		</trim>
+
+	</insert>
+	
+	<update id="updateRefundReturn" parameterType="com.leimingtech.core.entity.base.RefundReturn">
+
+		update shop_refund_return
+		<set>
+			<if test="refundId != null ">
+				refund_id = #{refundId},
+			</if>
+			<if test="orderId != null ">
+				order_id = #{orderId},
+			</if>
+			<if test="orderSn != null and orderSn != ''">
+				order_sn = #{orderSn},
+			</if>
+			<if test="refundSn != null and refundSn != ''">
+				refund_sn = #{refundSn},
+			</if>
+			<if test="storeId != null ">
+				store_id = #{storeId},
+			</if>
+			<if test="storeName != null and storeName != ''">
+				store_name = #{storeName},
+			</if>
+			<if test="buyerId != null ">
+				buyer_id = #{buyerId},
+			</if>
+			<if test="buyerName != null and buyerName != ''">
+				buyer_name = #{buyerName},
+			</if>
+			<if test="goodsId != null ">
+				goods_id = #{goodsId},
+			</if>
+			<if test="orderGoodsId != null ">
+				order_goods_id = #{orderGoodsId},
+			</if>
+			<if test="goodsName != null and goodsName != ''">
+				goods_name = #{goodsName},
+			</if>
+			<if test="goodsNum != null ">
+				goods_num = #{goodsNum},
+			</if>
+			<if test="refundAmount != null and refundAmount != ''">
+				refund_amount = #{refundAmount},
+			</if>
+			<if test="goodsImage != null and goodsImage != ''">
+				goods_image = #{goodsImage},
+			</if>
+			<if test="orderGoodsType != null">
+				order_goods_type = #{orderGoodsType},
+			</if>
+			<if test="refundType != null">
+				refund_type = #{refundType},
+			</if>
+			<if test="sellerState != null">
+				seller_state = #{sellerState},
+			</if>
+			<if test="refundState != null">
+				refund_state = #{refundState},
+			</if>
+			<if test="returnType != null">
+				return_type = #{returnType},
+			</if>
+			<if test="orderLock != null">
+				order_lock = #{orderLock},
+			</if>
+			<if test="goodsState != null">
+				goods_state = #{goodsState},
+			</if>
+			<if test="createTime != null ">
+				create_time = #{createTime},
+			</if>
+			<if test="sellerTime != null ">
+				seller_time = #{sellerTime},
+			</if>
+			<if test="adminTime != null ">
+				admin_time = #{adminTime},
+			</if>
+			<if test="reasonId != null ">
+				reason_id = #{reasonId},
+			</if>
+			<if test="reasonInfo != null and reasonInfo != ''">
+				reason_info = #{reasonInfo},
+			</if>
+			<if test="picInfo != null and picInfo != ''">
+				pic_info = #{picInfo},
+			</if>
+			<if test="buyerMessage != null and buyerMessage != ''">
+				buyer_message = #{buyerMessage},
+			</if>
+			<if test="sellerMessage != null and sellerMessage != ''">
+				seller_message = #{sellerMessage},
+			</if>
+			<if test="adminMessage != null and adminMessage != ''">
+				admin_message = #{adminMessage},
+			</if>
+			<if test="expressId != null">
+				express_id = #{expressId},
+			</if>
+			<if test="expressName != null and expressName != '' ">
+				express_name = #{expressName},
+			</if>
+			<if test="invoiceNo != null and invoiceNo != ''">
+				invoice_no = #{invoiceNo},
+			</if>
+			<if test="shipTime != null ">
+				ship_time = #{shipTime},
+			</if>
+			<if test="delayTime != null ">
+				delay_time = #{delayTime},
+			</if>
+			<if test="receiveTime != null ">
+				receive_time = #{receiveTime},
+			</if>
+			<if test="receiveMessage != null and receiveMessage != ''">
+				receive_message = #{receiveMessage},
+			</if>
+			<if test="commisRate != null">
+				commis_rate = #{commisRate},
+			</if>
+			<if test="batchNo != null and batchNo != '' ">
+				batch_no = #{batchNo},
+			</if>
+		</set>
+
+		WHERE refund_id = #{refundId}
+
+	</update>
+	
+	<!-- 根据退款批次号修改管理员审核状态(只限支付宝) -->
+	<update id="updateRefundReturnByBatchNo" parameterType="com.leimingtech.core.entity.base.RefundReturn">
+		update shop_refund_return
+		<set>
+			admin_message = #{adminMessage},
+			admin_time = #{adminTime},
+			refund_state = #{refundState}
+		</set>
+		WHERE batch_no = #{batchNo}
+	</update>
+	
+	<!-- 查询退款退货详情 -->
+	<select id="findRefundReturnDetail" parameterType="com.leimingtech.core.entity.base.RefundReturn" resultMap="ReturnDetailVo">
+		select <include refid="Base_Column_List" />
+		from shop_refund_return where refund_id = #{refundId}
+		<if test="buyerId != null">
+			and buyer_id = #{buyerId}
+		</if>
+		<if test="storeId != null">
+			and store_id = #{storeId}
+		</if>
+	</select>
+	
+	<!-- 根据退款批次号查询退货退款信息 -->
+	<select id="findRefundReturnByBatchNo" parameterType="string" resultMap="BaseResultMap">
+		select <include refid="Base_Column_List" />
+		from shop_refund_return where batch_no = #{batchNo}
+	</select>
+</mapper>
