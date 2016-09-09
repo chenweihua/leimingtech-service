@@ -26,6 +26,11 @@
         INSERT INTO shop_spec_value(sp_value_name, sp_id, sp_value_image, sp_value_sort)
         VALUES(#{spValueName},#{spId},#{spValueImage},#{spValueSort});
     </insert>
+    
+    <insert id="insert" parameterType="com.leimingtech.core.entity.base.SpecValue" useGeneratedKeys="true" keyProperty="spValueId" >
+        INSERT INTO shop_spec_value(sp_value_name, sp_id, sp_value_image, sp_value_sort)
+        VALUES(#{spValueName},#{spId},#{spValueImage},#{spValueSort});
+    </insert>
 
     <update id="update" parameterType="com.leimingtech.core.entity.base.SpecValue">
          update shop_spec_value

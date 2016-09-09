@@ -87,6 +87,21 @@ public class SpecServiceImpl implements SpecService{
     }
     
     /**
+     * 在某个规格下插入一个规格值
+     */
+	@Override
+	public void insert(SpecValue specValue) {
+		Spec spec= specDao.findById(specValue.getSpId());//获取该规格的信息
+		String spValue= spec.getSpValue();
+		spValue +=","+specValue.getSpValueName();
+		spec.setSpValue(spValue);
+		specDao.update(spec);
+		specValueDao.insert(specValue);//更新规格的字表值
+		
+	}
+    
+    
+    /**
      * 修改
      * @param goodsSpec
      */

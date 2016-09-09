@@ -3,6 +3,7 @@ package com.leimingtech.service.module.goods.service;
 import java.util.List;
 
 import com.leimingtech.core.entity.base.Spec;
+import com.leimingtech.core.entity.base.SpecValue;
 import com.leimingtech.core.entity.vo.SpecVo;
 import com.leimingtech.service.utils.page.Pager;
 
@@ -41,4 +42,6 @@ public interface SpecService {
     public List<SpecVo> findListByType(Integer typeId);
     
     public void deleteSpecBySpId(Integer spId);
+
+	public void insert(SpecValue specValue);
 }

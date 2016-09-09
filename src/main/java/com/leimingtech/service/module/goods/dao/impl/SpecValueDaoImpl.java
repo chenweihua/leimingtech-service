@@ -56,4 +56,10 @@ public class SpecValueDaoImpl implements SpecValueDao{
 		return goodsSpecValueMapper.findPageList(pager);
 	}
 
+	@Override
+	public void insert(SpecValue specValue) {
+		// TODO Auto-generated method stub
+		goodsSpecValueMapper.insert(specValue);
+	}
+
 }

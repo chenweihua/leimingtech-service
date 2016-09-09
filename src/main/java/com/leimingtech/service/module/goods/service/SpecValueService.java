@@ -22,6 +22,12 @@ public interface SpecValueService {
     void update(SpecValue specValue);
 
     /**
+     * 插入
+     * @param specValue
+     */
+    void insert(SpecValue specValue);    
+    
+    /**
      * 删除
      * @param id
      */
@@ -55,4 +61,6 @@ public interface SpecValueService {
      * @return
      */
     List<SpecValue> findPageList(Pager pager);
+    
+    
 }

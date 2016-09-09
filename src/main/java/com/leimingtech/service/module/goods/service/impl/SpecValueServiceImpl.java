@@ -63,4 +63,10 @@ public class SpecValueServiceImpl implements SpecValueService{
 		// TODO Auto-generated method stub
 		specValueDao.deleteBySpValueId(id);
 	}
+
+	@Override
+	public void insert(SpecValue specValue) {
+		// TODO Auto-generated method stub
+		specValueDao.insert(specValue);
+	}
 }

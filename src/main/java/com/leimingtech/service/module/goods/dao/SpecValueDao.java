@@ -28,6 +28,12 @@ public interface SpecValueDao {
     void deleteBySpId(@Param("spId") Integer id);
 
     /**
+     * 插入
+     * @param id
+     */
+    void insert(SpecValue specValue);
+   
+    /**
      * 查询单条,通过规格id
      * @param id
      * @return

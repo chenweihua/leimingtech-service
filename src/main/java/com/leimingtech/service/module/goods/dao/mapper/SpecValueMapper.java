@@ -30,6 +30,11 @@ public interface SpecValueMapper {
      */
     void deleteBySpId(@Param("spId") Integer id);
 
+    /**
+     * 删除
+     * @param id
+     */
+    void insert(SpecValue specValue);
     
     /**
      * 删除某个规格的值
