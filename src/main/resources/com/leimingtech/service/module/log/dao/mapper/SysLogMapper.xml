@@ -8,14 +8,15 @@
         <result column="create_by" property="createBy" jdbcType="VARCHAR" />
         <result column="create_time" property="createTime" jdbcType="BIGINT" />
         <result column="remote_addr" property="remoteAddr" jdbcType="VARCHAR" />
-        <result column="user_agent" property="userAgent" jdbcType="VARCHAR" />
+        <result column="user_agent" property="userAgent" jdbcType="VARCHAR" />     
+        <result column="request_uri" property="requestUri" jdbcType="VARCHAR" />        
         <result column="method" property="method" jdbcType="VARCHAR" />
         <result column="params" property="params" jdbcType="VARCHAR" />
         <result column="exception" property="exception" jdbcType="VARCHAR" />
     </resultMap>
 
     <sql id="Base_Column_List">
-        id, type, title, create_by, create_time, remote_addr,user_agent, method, params, exception
+        id, type, title, create_by, create_time, remote_addr,user_agent,request_uri, method, params, exception
     </sql>
 
 	<sql id="whereStatement">
@@ -86,7 +87,7 @@
 	</select>
 
    <insert id="save" parameterType="com.leimingtech.core.entity.base.SysLog" useGeneratedKeys="true">
-        insert into shop_sys_log (type, title, create_by, create_time, remote_addr,user_agent, method, params, exception)
-        values (#{type}, #{title}, #{createBy}, #{createTime}, #{remoteAddr},#{userAgent}, #{method}, #{params}, #{exception})
+        insert into shop_sys_log (type, title, create_by, create_time, remote_addr,user_agent,request_uri, method, params, exception)
+        values (#{type}, #{title}, #{createBy}, #{createTime}, #{remoteAddr},#{userAgent},#{requestUri},#{method}, #{params}, #{exception})
     </insert>
 </mapper>
